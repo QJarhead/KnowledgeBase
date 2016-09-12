@@ -1,62 +1,7 @@
 <?php
 
 include_once 'function.php';
-
-  /*******************************************************
-   * Only these origins will be allowed to upload images *
-   ******************************************************/
-  $accepted_origins = array("http://localhost", "http://192.168.0.117", "http://example.com");
-
-  /*********************************************
-   * Change this line to set the upload folder *
-   *********************************************/
-  $imageFolder = "img/";
-
-  reset ($_FILES);
-  $temp = current($_FILES);
-  if (is_uploaded_file($temp['tmp_name'])){
-    if (isset($_SERVER['HTTP_ORIGIN'])) {
-      // same-origin requests won't set an origin. If the origin is set, it must be valid.
-      if (in_array($_SERVER['HTTP_ORIGIN'], $accepted_origins)) {
-        header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
-      } else {
-        header("HTTP/1.0 403 Origin Denied");
-        return;
-      }
-    }
-
-    /*
-      If your script needs to receive cookies, set images_upload_credentials : true in
-      the configuration and enable the following two headers.
-    */
-    // header('Access-Control-Allow-Credentials: true');
-    // header('P3P: CP="There is no P3P policy."');
-
-    // Sanitize input
-    if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
-        header("HTTP/1.0 500 Invalid file name.");
-        return;
-    }
-
-    // Verify extension
-    if (!in_array(strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION)), array("gif", "jpg", "png"))) {
-        header("HTTP/1.0 500 Invalid extension.");
-        return;
-    }
-
-    // Accept upload if there was no origin, or if it is an accepted origin
-    $filetowrite = $imageFolder . $temp['name'];
-    move_uploaded_file($temp['tmp_name'], $filetowrite);
-
-    // Respond to the successful upload with JSON.
-    // Use a location key to specify the path to the saved image resource.
-    // { location : '/your/uploaded/image/file'}
-    echo json_encode(array('location' => $filetowrite));
-  } else {
-    // Notify editor that the upload failed
-    header("HTTP/1.0 500 Server Error");
-  }
-
+include_once 'globalVariable.php';
 
 //Umleitungen
 $actual_link = "$_SERVER[REQUEST_URI]";
@@ -88,20 +33,19 @@ if(isset($_POST['SubmitButton'])){ //check if form was submitted
 	$result = sqlQuery("INSERT INTO KB_ARTICLE_" . $KB_ID . " (KB_ARTICLE_ID, KB_ARTICLE_TEXT_DE, KB_ARTICLE_TITLE_DE) VALUES('" . $KB_ID . "', '".$KB_UPDATE_TEXT."','".$KB_UPDATE_TITLE."');");
 }
 
+// Zeile auslesen für die KnowledgeBase_ID
+
+$result = sqlQuery("SELECT * FROM `KnowledgeBase` ORDER BY KB_CREATION_TIME DESC LIMIT 4");
+// Ausgabe der Zeilen
+while($row = $result->fetch_assoc()){
+	$KB_NEW_ARTICLE = $KB_NEW_ARTICLE . "<li><a href=/kb/" . htmlspecialchars_decode($row['KB_ID']) . ">" . htmlspecialchars_decode($row['KB_TITLE']) . "</a></li>";
+}
+
 // Last Update
 $result = sqlQuery("SELECT * FROM `KnowledgeBase` ORDER BY KB_LAST_UPDATE_TIME DESC LIMIT 4");
 while($row = $result->fetch_assoc()){
 	$KB_EDIT_ARTICLE = $KB_EDIT_ARTICLE . "<li><a href=/kb/" . htmlspecialchars_decode($row['KB_ID']) . ">" . htmlspecialchars_decode($row['KB_TITLE']) . "</a></li>";
 }
-
-for ($i = 4; $i >= 1; $i--) {
-	$sqlQueryTest = "SELECT * FROM KB_ARTICLE_".$i." WHERE KB_ARTICLE_CHILD_ID=(SELECT MAX(KB_ARTICLE_CHILD_ID) AS KB_ARTICLE_SEARCH_MAX_ID FROM KB_ARTICLE_".$i." WHERE KB_ARTICLE_CHILD_ID=(SELECT MAX(KB_ARTICLE_CHILD_ID) FROM KB_ARTICLE_".$i."));";
-	$result = sqlQuery($sqlQueryTest);
-	while($row = $result->fetch_assoc()){
-		$KB_NEW_ARTICLE = $KB_NEW_ARTICLE . "<li><a href=/kb/" . htmlspecialchars_decode($row['KB_ARTICLE_ID']) . ">" . htmlspecialchars_decode($row['KB_ARTICLE_TITLE_DE']) . "</a></li>";
-	}
-}
-
 
 switch ($SITE_DESTIANATION) {
     case "KB":
@@ -245,11 +189,6 @@ switch ($SITE_DESTIANATION) {
 				</form>
 			</p>
             <article>
-			
-			
-		
-			
-			
 			<form action='' method='post'>
 			<input type='submit' name='SubmitButton' class='button' value='Save';'/>
 			<input type='text' id='KB_Title' name='KB_Title' maxlength='50' value='".$KB_TITLE."' style='text-weight:bold;'>
@@ -332,13 +271,11 @@ switch ($SITE_DESTIANATION) {
         <script src="/modules/js/vendor/prefixfree.min.js"></script>
         <script src="/modules/js/vendor/jquery.slides.min.js"></script>
         <script src="/modules/js/script.js"></script>
-		
-		
-		
 		<script src="/modules/tinymce/tinymce.dev.js"></script>
 		<link rel="stylesheet" type="text/css" href="/modules/tinymce/plugins/codesample/css/prism.css">
+		<script src="prism.js"></script>
 		<script><?php echo $LOAD_DIRTYSTATE; ?></script>
-		<script><?php echo $INIT_TINYMCE; ?>;</script>
+		<script>tinymce.init(<?php echo $INIT_TINYMCE; ?>);</script>
 		<script><?php echo $LOAD_JS_SLIDER; ?></script>
 		<script type='text/javascript'>
 		var data = <?php echo json_encode($input); ?>;
@@ -367,15 +304,15 @@ switch ($SITE_DESTIANATION) {
             <nav>
             	<h2 class="hidden">Our navigation</h2>
                 <ul>
-                    <li><a href="/">Startseite</a></li>
-					<li><a href="/kb/"><?php echo $TL_KnowledgebaseName; ?></a></li>
-                    <li><a href="/filemanager/dialog.php">Dateimanager</a></li>
+                    <li><a href="/kb/"><?php echo $TL_KnowledgebaseName; ?></a></li>
+                    <li><a href="javascript:void(0)">Platzhalter2</a></li>
+                    <li><a href="javascript:void(0)">Platzhalter</a></li>
                 </ul>
             </nav>
         </header>
         <section id="spacer">  
         	<h2 class="hidden">Suche</h2>          
-            <p>Was habe ich schon wieder vergessen?</p>
+            <p>Was habe ich schon wieder vergesse2n?</p>
             <div class="search">
                 <form action="/kb_search/">
                     <input type="text" name="search" value=""/>
@@ -388,14 +325,81 @@ switch ($SITE_DESTIANATION) {
 			<?php echo $SITE_ARTICLE;?>
             <br class="clear"/>
         </section>
+        <section id="four_columns">
+            <h2>Andere Artikel zu diesem Thema</h2>    
+            <article class="img-item">
+            	<h3 class="hidden">Dolor sit amet</h3>
+                <figure>  
+                    <a href="img/example-slide-1.jpg" rel="lightbox" title="Some title">
+                        <span class="thumb-screen"></span>
+                        <img src="img/example-slide-1sml.jpg" alt="Some alt text"/>
+                    </a>
+                    <figcaption>
+                        <strong>
+                            Photo by: Some name
+                        </strong>
+                        Als es die ersten Hügel des Kursivgebirges erklommen hatte
+                    </figcaption>
+                </figure>
+            </article>
+            <article class="img-item">
+            	<h3 class="hidden">Sit Amet</h3>
+                <figure>
+                    <a href="img/example-slide-2.jpg" rel="lightbox" title="Some title">
+                        <span class="thumb-screen"></span>
+                        <img src="img/example-slide-2sml.jpg" alt="Some alt text"/>
+                    </a>
+                    <figcaption>
+                        <strong>
+                            Photo by: Some name
+                        </strong>
+                        warf es einen letzten Blick zurück auf die Skyline seiner Heimatstadt Buchstabhausen
+                    </figcaption>
+                </figure>
+            </article>
+            <article class="img-item">
+            	<h3 class="hidden">Dolor Sit</h3>
+                <figure>
+                    <a href="img/example-slide-3.jpg" rel="lightbox" title="Some title">
+                        <span class="thumb-screen"></span>
+                        <img src="img/example-slide-3sml.jpg" alt="Some alt text"/>
+                    </a>
+                    <figcaption>
+                        <strong>
+                            Photo by: Some name
+                        </strong>
+                        die Headline von Alphabetdorf und die Subline seiner eigenen Straße.
+                    </figcaption>
+                </figure>
+            </article>
+            <article class="img-item">
+            	<h3 class="hidden">Lorem Ipsum</h3>
+                <figure>
+                    <a href="img/example-slide-4.jpg" rel="lightbox" title="Some title">
+                        <span class="thumb-screen"></span>
+                        <img src="img/example-slide-4sml.jpg" alt="Some alt text"/>
+                    </a>
+                    <figcaption>
+                        <strong>
+                            Photo by: Some name
+                        </strong>
+                        Wehmütig lief ihm eine rhetorische Frage über die Wange.
+                    </figcaption>
+                </figure>
+            </article>
+            <br class="clear"/>
+        </section>
         <footer>
         	<h2 class="hidden">Our footer</h2>
             <section id="copyright">
             	<h3 class="hidden">Copyright notice</h3>
                 <div class="wrapper">
                     <div class="social">
-                        <a href="https://de-de.facebook.com/timchristoph.lid"><img src="/img/icons/Facebook.png" alt="Facebook - Profil" width="25"/></a>
-                        <a href="https://plus.google.com/u/0/+TimChristophLid/"><img src="/img/icons/GooglePlus.png" alt="Google+ Profil" width="25"/></a>
+                        <a href="javascript:void(0)"><img src="img/icon6.png" alt="Some alt text" width="25"/></a>
+                        <a href="javascript:void(0)"><img src="img/icon7.png" alt="Some alt text" width="25"/></a>
+                        <a href="javascript:void(0)"><img src="img/icon8.png" alt="Some alt text" width="25"/></a>
+                        <a href="javascript:void(0)"><img src="img/icon9.png" alt="Some alt text" width="25"/></a>
+                        <a href="javascript:void(0)"><img src="img/icon10.png" alt="Some alt text" width="25"/></a>
                     </div>
 					<?php echo $TL_COPYRIGHT; ?>
                     </div>
@@ -412,6 +416,14 @@ switch ($SITE_DESTIANATION) {
 						<?php echo $KB_NEW_ARTICLE; ?>
                     </ul>
                 </article>
+                <article class="column rightlist">
+                    <h4>Bearbeitete Artikel</h4>
+                    <ul>
+						<?php echo $KB_EDIT_ARTICLE; ?>
+					</ul>
+                    <br class="clear"/>
+                </article>
+            </section>
         </footer>
 	</body>
 </html>

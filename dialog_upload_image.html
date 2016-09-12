@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Knowledge Base</title>
+        <link rel="stylesheet" href="/style/css/reset.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/style/css/style_upload_dialog.css" type="text/css" media="screen" />
+        <link href="/modules/lightbox/css/lightbox.css" rel="stylesheet" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans' rel='stylesheet' type='text/css'>
+        
+        <script src="/modules/js/vendor/modernizr.min.js"></script>
+        <script src="/modules/js/vendor/respond.min.js"></script>
+        
+        <!-- include extern jQuery file but fall back to local file if extern one fails to load !-->
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="js\/vendor\/1.7.2.jquery.min.js"><\/script>')</script>
+        
+        <script src="/modules/lightbox/js/lightbox.js"></script>
+        <script src="/modules/js/vendor/prefixfree.min.js"></script>
+        <script src="/modules/js/vendor/jquery.slides.min.js"></script>
+        <script src="/modules/js/script.js"></script>
+	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+	<script>tinymce.init({ selector:'textarea' });</script>
+
+<link rel="stylesheet" type="text/css" href="/modules/tinymce/plugins/codesample/css/prism.css">
+<script src="/modules/tinymce/plugins/codesample/prism.js"></script>
+
+
+<script>
+        function responsive_filemanager_callback(field_id){
+            console.log(field_id);
+            var url=jQuery('#'+field_id).val();
+            //alert('update '+field_id+" with "+url); 
+            //your code
+            $('#image_preview').attr('src',document.getElementById("image_link").value).show();
+            parent.$.fancybox.close();
+        } 
+
+		function myCustomFileBrowser(field_name, url, type, win) {
+        // Do custom browser logic
+        win.document.forms[0].elements[field_name].value = 'my browser value';
+}
+		
+function SelectArticle(KB_ID, KB_TITLE) {
+
+
+
+alert(tinyMCE.get('Insert/edit image').getContent());
+
+
+
+//top.tinymce.activeEditor.windowManager.open({
+//    title: "My html dialog",
+//    url: '/filemanager/dialog.php?type=1&field_id=image_link"',
+//   width: 1000,
+//    height: 700
+};
+
+//top.tinymce.activeEditor.insertContent("<a href='/img/icons/Facebook.png' rel='lightbox' title='Some title'><span class='thumb-screen'></span><img src='/img/icons/Facebook.png' alt='Some alt text'/></a>");
+//top.tinymce.activeEditor.windowManager.close();
+
+
+</script>
+	</head>
+
+	<body>
+<table>
+  <colgroup>
+    <col width="80">
+    <col width="380">
+  </colgroup>
+  <tr>
+    <td>Source</td>
+<td><input type="text" id="image_description_test" name="search" value=""/>
+
+<a href='#' onclick='SelectArticle("asdf","asdf");'>
+<img src="source/icons/Icons/Windows_Explorere_Search.png"
+  alt="Wasdf" id="image_clickable" height="30"/>
+  </a>
+
+   </td>
+</tr>
+	<tr>
+<td>Image description</td>
+<td><input type="text" id="image_description" name="search" value=""/></td>
+
+  </tr>
+  	<tr>
+<td>Dimensions</td>
+<td>
+<input type="text" id="image_dimension" name="image_dimension" maxlength="4" value=""/>
+x
+<input type="text" id="image_dimension_y" name="image_dimension_y" maxlength="4" value=""/>
+ <input type="checkbox" id="checkbox_lightbox" name="checkbox_lightbox" value="0" style="width=10px">
+
+<label for="checkbox-0" style="width=10px">Constrain proportions</label>
+</td>
+  </tr>
+</table>
+<a href='#' onclick='SelectArticle(1,"Test")'>OK</a></br >
+	</body>
+</html>
