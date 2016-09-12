@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+<h2>Suche Artikel zum Verknüpfen</h2>
+<form action="">
+<input type="text" name="search" value="Gib ein par Schlagwörter ein" onfocus="if(this.value=='Gib ein par Schlagwörter ein'){this.value='';}" onblur="if(this.value==''){this.value='Gib ein par Schlagwörter ein';}"/>
+<input type="submit" name="" class="button" onclick="location.href = 'www.google.de';"  value="Suchen!"/>
+<script>
+// Get the parameters passed into the window from the top frame
+var args = top.tinymce.activeEditor.windowManager.getParams();
+top.tinymce.activeEditor.insertContent("Hallo Welt =)");
+console.log(args.arg1, args.arg2);
+
+</script>
+
+</body>
+</html>
+
+
