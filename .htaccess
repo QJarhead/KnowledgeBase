@@ -1,0 +1,9 @@
+Options +FollowSymLinks
+RewriteBase /
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule kb/(.*) index.php?ID=$1
+RewriteRule kb_edit/(.*) index.php?ID=$1
+RewriteRule kb_search/(.*) index.php?sitesearch=$1
+RewriteRule kb_new/(.*) index.php
