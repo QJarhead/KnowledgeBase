@@ -1,6 +1,6 @@
 <?php
 
-include_once 'function.php';
+  include_once 'function.php';
 
   /*******************************************************
    * Only these origins will be allowed to upload images *
@@ -75,6 +75,13 @@ $KB_SearchString = $_GET["sitesearch"];
 
 //Namenszusatz hinzufügen
 $SITE_DESTIANATION = checkSiteDestination($_SERVER[REQUEST_URI]);
+
+echo $SITE_DESTIANATION;
+
+if(strpos($SITE_DESTIANATION, "init") == 0){
+echo "asdf";
+}else{
+
 $TL_SiteName = $TL_SiteName . " - " . $SITE_DESTIANATION;
 
 if(isset($_POST['SubmitButton'])){ //check if form was submitted
@@ -101,8 +108,8 @@ for ($i = 4; $i >= 1; $i--) {
 		$KB_NEW_ARTICLE = $KB_NEW_ARTICLE . "<li><a href=/kb/" . htmlspecialchars_decode($row['KB_ARTICLE_ID']) . ">" . htmlspecialchars_decode($row['KB_ARTICLE_TITLE_DE']) . "</a></li>";
 	}
 }
-
-
+}
+echo $SITE_DESTIANATION;
 switch ($SITE_DESTIANATION) {
     case "KB":
 		If(!$KB_ID == "") {		
@@ -308,6 +315,8 @@ switch ($SITE_DESTIANATION) {
 			);
 		");
 		header("Location: /kb/". $NEXT_ID ."");
+	case "init":
+		echo "test";
 	default:
         break;
 }

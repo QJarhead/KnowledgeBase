@@ -1,7 +1,24 @@
 <?php
 
-include_once 'config/config.php';
+if(strpos($_SERVER[REQUEST_URI], "init") == 1){
+echo "asdf";
+}else{
 
+
+if (file_exists("config/config.php")) {
+    echo "Die Datei $filename existiert";
+    include_once 'config/config.php';
+
+} else {
+
+$actual_link = "$_SERVER[HTTP_HOST]";
+    echo $actual_link;
+    header("Location: http://".$actual_link."/init");
+    exit();
+    echo "Die Datei $filename existiert nicht";
+}
+
+}
 function checkSiteDestination($url)
 {
 	$setSiteDestination = "";
@@ -14,7 +31,9 @@ function checkSiteDestination($url)
 		$setSiteDestination = "KB - Search";
 	}elseif(strpos($url, "kb_new/") == 1){
 		$setSiteDestination = "KB - New";
-	}else{
+	}elseif(strpos($url, "init") == 1){
+                $setSiteDestination = "init";
+        }else{
 		$setSiteDestination = "Webseite";
 	}
 	return $TL_SiteName . $setSiteDestination;
