@@ -1,18 +1,18 @@
 <?php
 
 if(strpos($_SERVER[REQUEST_URI], "init") == 1){
-echo "asdf";
+echo "";
+}elseif(strpos($_SERVER[REQUEST_URI], "createConfig.php") == 1){
+echo "";
 }else{
 
 
 if (file_exists("config/config.php")) {
-    echo "Die Datei $filename existiert";
     include_once 'config/config.php';
 
 } else {
 
 $actual_link = "$_SERVER[HTTP_HOST]";
-    echo $actual_link;
     header("Location: http://".$actual_link."/init");
     exit();
     echo "Die Datei $filename existiert nicht";
@@ -50,9 +50,19 @@ function sqlQuery($sql_Query)
 }
 
 function testDatabase(){
+global $KB_DATABASE;
+if (mysqli_connect_errno()) {
+	echo "asdfasdfasdf";  
+printf("Verbindung fehlgeschlagen: %s\n", mysqli_connect_error());
+  exit();
+}
+
 	if($db->connect_errno > 0){
+		echo "geht niht";
+
 		die('Unable to connect to database [' . $db->connect_error . ']');
 	}
+	echo "geht";
 }
 
 function randomString($size) {

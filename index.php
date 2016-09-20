@@ -76,10 +76,8 @@ $KB_SearchString = $_GET["sitesearch"];
 //Namenszusatz hinzufügen
 $SITE_DESTIANATION = checkSiteDestination($_SERVER[REQUEST_URI]);
 
-echo $SITE_DESTIANATION;
-
 if(strpos($SITE_DESTIANATION, "init") == 0){
-echo "asdf";
+echo "";
 }else{
 
 $TL_SiteName = $TL_SiteName . " - " . $SITE_DESTIANATION;
@@ -109,7 +107,6 @@ for ($i = 4; $i >= 1; $i--) {
 	}
 }
 }
-echo $SITE_DESTIANATION;
 switch ($SITE_DESTIANATION) {
     case "KB":
 		If(!$KB_ID == "") {		
@@ -316,7 +313,23 @@ switch ($SITE_DESTIANATION) {
 		");
 		header("Location: /kb/". $NEXT_ID ."");
 	case "init":
-		echo "test";
+		$SITE_ARTICLE = '<center>
+
+Keine Konfiguration gefunden!<br>
+<form action="createConfig.php" method="post">
+    Seitename:<br><input type="text" name="sitename" /><br /><br>
+    SubWebsite: <br><input type="text" name="sitesubname" /><br /><br>
+    KnowledgebaseName: <br><input type="text" name="knowledgebasename" /><br /><br>
+    Datenbank-Host: <br><input type="text" name="host" /><br /><br>
+    DatenbankName: <br><input type="text" name="database" /><br /><br>
+    Benutzer: <br><input type="text" name="user" /><br /><br>
+    Passwort: <br><input type="password" name="password" /><br /><br>
+    Copyright: <br><input type="text" name="copyright" /><br /><br>
+    <br><input type="submit" name="submit" value="Test!" /><br>
+</form>
+</center>
+
+';
 	default:
         break;
 }
