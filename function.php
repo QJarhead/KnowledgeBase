@@ -49,20 +49,18 @@ function sqlQuery($sql_Query)
     return $sqlResult;   
 }
 
-function testDatabase(){
-global $KB_DATABASE;
-if (mysqli_connect_errno()) {
-	echo "asdfasdfasdf";  
-printf("Verbindung fehlgeschlagen: %s\n", mysqli_connect_error());
-  exit();
-}
-
-	if($db->connect_errno > 0){
-		echo "geht niht";
-
-		die('Unable to connect to database [' . $db->connect_error . ']');
+function checkDatabase($KB_DATABASE){
+	if($KB_DATABASE->connect_errno > 0){
+		return false;
 	}
-	echo "geht";
+	return true;
+
+if ($KB_DATABASE->connect_errno) {
+    printf("Connect failed: %s\n", $KB_DATABASE	->connect_error);
+	echo "asdfasdfasdf";
+	return "1";
+}
+return "2";
 }
 
 function randomString($size) {

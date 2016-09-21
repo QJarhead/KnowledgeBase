@@ -316,7 +316,7 @@ switch ($SITE_DESTIANATION) {
 		$SITE_ARTICLE = '<center>
 
 Keine Konfiguration gefunden!<br>
-<form action="createConfig.php" method="post">
+<form onsubmit="return checkDatabase();" action="createConfig.php" method="post">
     Seitename:<br><input type="text" name="sitename" /><br /><br>
     SubWebsite: <br><input type="text" name="sitesubname" /><br /><br>
     KnowledgebaseName: <br><input type="text" name="knowledgebasename" /><br /><br>
@@ -362,7 +362,18 @@ Keine Konfiguration gefunden!<br>
 		<script><?php echo $LOAD_DIRTYSTATE; ?></script>
 		<script><?php echo $INIT_TINYMCE; ?>;</script>
 		<script><?php echo $LOAD_JS_SLIDER; ?></script>
-		<script type='text/javascript'>
+		<script type="text/javascript">
+
+function checkDatabase() {
+
+	var my_var = <?php echo "\"".checkDatabase()."\"" ?>;
+
+        alert(my_var);
+
+}
+
+
+
 		var data = <?php echo json_encode($input); ?>;
 		if(data!=null){
 			window.location.replace(window.location.protocol + "//" + window.location.host + "" + window.location.pathname);
