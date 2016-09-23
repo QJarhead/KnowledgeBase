@@ -316,14 +316,45 @@ switch ($SITE_DESTIANATION) {
 		$SITE_ARTICLE = '<center>
 
 Keine Konfiguration gefunden!<br>
+<?php
+
+
+// define variables and set to empty values
+$name = $email = $gender = $comment = $website = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $name = test_input($_POST["name"]);
+  $email = test_input($_POST["email"]);
+  $website = test_input($_POST["website"]);
+  $comment = test_input($_POST["comment"]);
+  $gender = test_input($_POST["gender"]);
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+
+
+?>
+
+
+
+
+
+
+
+
 <form onsubmit="return checkDatabase();" action="createConfig.php" method="post">
     Seitename:<br><input type="text" name="sitename" /><br /><br>
     SubWebsite: <br><input type="text" name="sitesubname" /><br /><br>
     KnowledgebaseName: <br><input type="text" name="knowledgebasename" /><br /><br>
-    Datenbank-Host: <br><input type="text" name="host" /><br /><br>
-    DatenbankName: <br><input type="text" name="database" /><br /><br>
-    Benutzer: <br><input type="text" name="user" /><br /><br>
-    Passwort: <br><input type="password" name="password" /><br /><br>
+    Datenbank-Host: <br><input type="text" name="host" id="host"/><br /><br>
+    DatenbankName: <br><input type="text" id="databasename" name="database" /><br /><br>
+    Benutzer: <br><input type="text" id="user" name="user" /><br /><br>
+    Passwort: <br><input type="password" id="password" name="password" /><br /><br>
     Copyright: <br><input type="text" name="copyright" /><br /><br>
     <br><input type="submit" name="submit" value="Test!" /><br>
 </form>
@@ -366,9 +397,21 @@ Keine Konfiguration gefunden!<br>
 
 function checkDatabase() {
 
+	var connection = document.getElementById("host").value + document.getElementById("user").value;
+
+	alert("Hier:" + <?php echo "\"te"."<script type='text/javascript'>connection</script>"."st\""; ?>);
+
 	var my_var = <?php echo "\"".checkDatabase()."\"" ?>;
 
-        alert(my_var);
+	if(my_var == 1){
+		alert(document.getElementById("host").value);
+		alert(document.getElementById("user").value);
+		alert(document.getElementById("password").value);
+		alert(document.getElementById("databasename").value);
+		alert(my_var);
+	}else{
+		alert(my_var);
+	}
 
 }
 

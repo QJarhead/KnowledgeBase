@@ -15,7 +15,7 @@ $TL_COPYRIGHT = "'.$_REQUEST["copyright"].'";
 
 ';
 
-/*file_put_contents ( "config/config.php" , $POST ); */
+file_put_contents ( "config/config.php" , $POST );
 
 include_once 'function.php';
 include_once 'config/config.php';

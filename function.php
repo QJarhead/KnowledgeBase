@@ -49,7 +49,7 @@ function sqlQuery($sql_Query)
     return $sqlResult;   
 }
 
-function checkDatabase($KB_DATABASE){
+function checkDatabase($DATABASE_HOST, $DATABASE_NAME, $DATABASE_USER, $DATABASE_PASSWORD){
 	if($KB_DATABASE->connect_errno > 0){
 		return false;
 	}
